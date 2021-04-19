@@ -5,25 +5,84 @@
 # CURD
 # find user
 
-def create(account_number, user_details):
+import os
+import validation
 
-    
-    f = open("data/user_record/" + str(account_number) + ".txt", "x")
-    f.write(str(user_details))
-    f.write(str(user_details))
-    f.close()
 
+user_db_path = "data\user_record\"
+
+def create(account_number, first_name, last_name, email, password):
 
     # create a file
-    # name of the file will be account_number.txt
+    # name of the file would be account_number.txt
     # add the user details to the file
     # return true
-    # is saving to file fails, delete created file
+    # if saving to file fails, then deleted created file
 
+    user_data = first_name + "," + last_name + "," + email + "," + password + "," + str(0)
+
+    if does_account_number_exist(user_account_number):
+
+        return False
+
+    if does_email_exist(email):
+        print("User already exists")
+        return False
+
+    completion_state = False
+
+    try:
+
+        f = open(user_db_path + str(user_account_number) + ".txt", "x")
+
+    except FileExistsError:
+
+        does_file_contain_data = read(user_db_path + str(user_account_number) + ".txt")
+        if not does_file_contain_data:
+            delete(user_account_number)
+
+    else:
+
+        f.write(str(user_data));
+        completion_state = True
+
+    finally:
+
+        f.close();
+        return completion_state
+    
+    
 def read(user_account_number):
-    print("read user record")
+
     # find user with account number
     # fetch content of the file
+    is_valid_account_number = validation.account_number_validation(user_account_number)
+
+    try:
+
+        if is_valid_account_number:
+            f = open(user_db_path + str(user_account_number) + ".txt", "r")
+        else:
+            f = open(user_db_path + user_account_number, "r")
+
+    except FileNotFoundError:
+
+        print("User not found")
+
+    except FileExistsError:
+
+        print("User doesn't exist")
+
+    except TypeError:
+
+        print("Invalid account number format")
+
+    else:
+
+        return f.readline()
+
+    return False
+ 
 
 def update(user_account_number):
     print("update user record")
@@ -34,14 +93,62 @@ def update(user_account_number):
     # return true
 
 def delete(user_account_number):
-    print("delete user record")
+
     # find user with account number
     # delete the user record (file)
     # return true
 
-def find(user_account_number):
-    print("find user")
-    # find user record in data folder
+    is_delete_successful = False
+
+    if os.path.exists(user_db_path + str(user_account_number) + ".txt"):
+
+        try:
+
+            os.remove(user_db_path + str(user_account_number) + ".txt")
+            is_delete_successful = True
+
+        except FileNotFoundError:
+
+            print("User not found")
+
+        finally:
+
+            return is_delete_successful
+
+def does_email_exist(email):
+
+    all_users = os.listdir(user_db_path)
+
+    for user in all_users:
+        user_list = str.split(read(user), ',')
+        if email in user_list:
+            return True
+    return False
 
 
-    create(456789,['Fay', 'Logan', 'password', ])
+def does_account_number_exist(account_number):
+
+    all_users = os.listdir(user_db_path)
+
+    for user in all_users:
+
+        if user == str(account_number) + ".txt":
+
+            return True
+
+    return False
+
+
+def authenticated_user(account_number_from_user, password):
+
+    if does_account_number_exist(account_number):
+
+        user = str.split(read(account_number), ',')
+
+        if password == user[3]:
+            return user
+
+    return False
+
+
+  
