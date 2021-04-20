@@ -151,4 +151,12 @@ def authenticated_user(account_number_from_user, password):
     return False
 
 
-  
+def account_balance(user_account_balance):
+
+    if get_user_balance = read(account_balance)
+
+        get_user_balance = str.split(get_user, ',')
+
+        if account_balance == user[4]:
+
+            return user
