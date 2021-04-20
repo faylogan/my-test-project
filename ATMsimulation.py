@@ -99,7 +99,7 @@ def bank_operations(user):
         
     print("now =", now)
 
-    selected_option = int(input("What would you like to do? (1) withdrawal (2) deposit (3) Logout (4) Exit \n"))
+    selected_option = int(input("What would you like to do? (1) withdrawal (2) deposit (3) account balance (4) Exit \n"))
 
     if(selected_option == 1):
         withdrawal_operation()
@@ -108,7 +108,7 @@ def bank_operations(user):
         deposit_operation()
 
     elif(selected_option == 3):
-        login()
+        account_balance(user)
 
     elif(selected_option == 4):
         exit()
@@ -139,6 +139,15 @@ def deposit_operation():
     print("Back to the Main menu")
     login()
         
+def account_balance(user):
+
+    get_user_balance = database.account_balance(account_balance)
+
+    print("Your account balance is: \n")
+
+    return user[4]
+    login()
+        
 def generation_account_number():
 
     return random.randrange(111111,999999)
@@ -148,10 +157,7 @@ def set_current_balance(user, balance):
     user[4] = balance
 
 
-def get_current_balance(user):
-    return user[4]
-
-def logout():
+def exit():
     login()
 
 
